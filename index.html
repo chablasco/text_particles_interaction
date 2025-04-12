@@ -25,11 +25,12 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   textFont('Arial');
   textSize(fontSize);
+  textColor(255);
   createParticlesFromWrappedText(inputText);
 }
 
 function draw() {
-  background(255);
+  background(0);
   for (let p of particles) {
     p.update();
     p.display();
