@@ -8,6 +8,8 @@
     body {
       margin: 0;
       overflow: hidden;
+      background-color: black;
+      color: white;
     }
     canvas {
       display: block;
@@ -26,7 +28,6 @@ function setup() {
   background(0);
   textFont('Arial');
   textSize(fontSize);
-  textColor(255);
   createParticlesFromWrappedText(inputText);
 }
 
@@ -125,7 +126,7 @@ class LetterParticle {
   }
 
   display() {
-    fill(0);
+    fill(255); // White text
     noStroke();
     text(this.letter, this.pos.x, this.pos.y);
   }
