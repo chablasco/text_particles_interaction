@@ -23,6 +23,7 @@ let lineSpacing = 60;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  background(0);
   textFont('Arial');
   textSize(fontSize);
   textColor(255);
@@ -30,7 +31,7 @@ function setup() {
 }
 
 function draw() {
-  background(black);
+  background(0);
   for (let p of particles) {
     p.update();
     p.display();
