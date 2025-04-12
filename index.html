@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <title>CB Text Particles Interaction</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+<script>
+let particles = [];
+let inputText = "När vi möter varandra med nyfikenhet istället för rädsla, öppnar vi dörrar till en värld där alla kan höra till.";
+let fontSize = 48;
+let lineSpacing = 60;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  textFont('Arial');
+  textSize(fontSize);
+  createParticlesFromWrappedText(inputText);
+}
+
+function draw() {
+  background(255);
+  for (let p of particles) {
+    p.update();
+    p.display();
+  }
+}
+
+function keyPressed() {
+  if (keyCode === BACKSPACE && inputText.length > 0) {
+    inputText = inputText.substring(0, inputText.length - 1);
+  } else if (![SHIFT, CONTROL, ALT, ENTER].includes(keyCode)) {
+    inputText += key;
+  }
+  particles = [];
+  createParticlesFromWrappedText(inputText);
+}
+
+function createParticlesFromWrappedText(txt, centerX = width / 2, centerY = height / 2) {
+  let lines = wrapText(txt, width * 0.8);
+  let totalHeight = lines.length * lineSpacing;
+  let startY = centerY - totalHeight / 2 + fontSize;
+
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i];
+    let lineWidth = textWidth(line);
+    let x = centerX - lineWidth / 2;
+    let y = startY + i * lineSpacing;
+
+    for (let j = 0; j < line.length; j++) {
+      let c = line[j];
+      let w = textWidth(c);
+      particles.push(new LetterParticle(c, x, y));
+      x += w;
+    }
+  }
+}
+
+function wrapText(txt, maxWidth) {
+  let words = txt.split(" ");
+  let lines = [];
+  let currentLine = "";
+
+  for (let word of words) {
+    let testLine = currentLine === "" ? word : currentLine + " " + word;
+    if (textWidth(testLine) < maxWidth) {
+      currentLine = testLine;
+    } else {
+      lines.push(currentLine);
+      currentLine = word;
+    }
+  }
+
+  if (currentLine.length > 0) {
+    lines.push(currentLine);
+  }
+
+  return lines;
+}
+
+class LetterParticle {
+  constructor(letter, x, y) {
+    this.letter = letter;
+    this.home = createVector(x, y);
+    this.pos = createVector(x, y);
+    this.vel = createVector();
+    this.acc = createVector();
+  }
+
+  update() {
+    let mouse = createVector(mouseX, mouseY);
+    let d = p5.Vector.dist(mouse, this.pos);
+    if (d < 100) {
+      let away = p5.Vector.sub(this.pos, mouse);
+      away.normalize();
+      let strength = map(d, 0, 100, 5, 0);
+      away.mult(strength);
+      this.applyForce(away);
+    }
+
+    let homeForce = p5.Vector.sub(this.home, this.pos);
+    homeForce.mult(0.05);
+    this.applyForce(homeForce);
+
+    this.vel.add(this.acc);
+    this.pos.add(this.vel);
+    this.vel.mult(0.85);
+    this.acc.mult(0);
+  }
+
+  applyForce(force) {
+    this.acc.add(force);
+  }
+
+  display() {
+    fill(0);
+    noStroke();
+    text(this.letter, this.pos.x, this.pos.y);
+  }
+}
+</script>
+</body>
+</html>
