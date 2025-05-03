@@ -91,6 +91,15 @@ function wrapText(txt, maxWidth) {
   return lines;
 }
 
+  function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+  }
+
+  function mousePressed() {
+    fullscreen(!fullscreen());
+  }
+  
+
 class LetterParticle {
   constructor(letter, x, y) {
     this.letter = letter;
