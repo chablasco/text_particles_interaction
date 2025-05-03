@@ -81,9 +81,11 @@ function wrapText(txt, maxWidth) {
   return lines;
 }
 
-  function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
-  }
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  particles = [];
+  createParticlesFromWrappedText(inputText); // Re-center and re-render particles
+}
 
   function mousePressed() {
     fullscreen(!fullscreen());
