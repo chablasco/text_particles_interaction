@@ -39,16 +39,6 @@ function draw() {
   }
 }
 
-function keyPressed() {
-  if (keyCode === BACKSPACE && inputText.length > 0) {
-    inputText = inputText.substring(0, inputText.length - 1);
-  } else if (![SHIFT, CONTROL, ALT, ENTER].includes(keyCode)) {
-    inputText += key;
-  }
-  particles = [];
-  createParticlesFromWrappedText(inputText);
-}
-
 function createParticlesFromWrappedText(txt, centerX = width / 2, centerY = height / 2) {
   let lines = wrapText(txt, width * 0.8);
   let totalHeight = lines.length * lineSpacing;
